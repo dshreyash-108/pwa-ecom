@@ -1,0 +1,46 @@
+<!-- cart.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="cart.css">
+    <title>Cart</title>
+</head>
+<body>
+    <h1>Cart</h1>
+    <div id="cartItems"></div>
+
+    <script>
+        function loadCartItems() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let cartItemsDiv = document.getElementById('cartItems');
+            cartItemsDiv.innerHTML = '';
+            cart.forEach(item => {
+                let productDiv = document.createElement('div');
+                let image = document.createElement('img');
+                image.src = item.image;
+                image.alt = item.name;
+                productDiv.appendChild(image);
+                let productName = document.createElement('span');
+                productName.textContent = item.name;
+                productDiv.appendChild(productName);
+                let deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteItem(item.name);
+                productDiv.appendChild(deleteButton);
+                cartItemsDiv.appendChild(productDiv);
+            });
+        }
+
+        function deleteItem(productName) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let updatedCart = cart.filter(item => item.name !== productName);
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            loadCartItems();
+        }
+
+        loadCartItems();
+    </script>
+</body>
+</html>
